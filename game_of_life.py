@@ -1,3 +1,5 @@
+from collections import namedtuple
+
 # Model
 # grid : update
 # [x] print grid
@@ -13,6 +15,19 @@
 
 # history
 # save/import figures
+
+Point = namedtuple('Point', ['i', 'j'])
+
+ADJACENT_POS = [
+    Point(0,1),
+    Point(1,1),
+    Point(1,0),
+    Point(0,-1),
+    Point(-1,-1),
+    Point(-1,0),
+    Point(-1,1),
+    Point(1,-1)
+]
 
 
 class GameOfLife:
@@ -62,6 +77,7 @@ class GameOfLife:
             row = []
             for j in range(self.cols):
                 neighbors = self.get_neighbors(i, j)
+                print(i, j, neighbors)
                 next_state = self.predict_next_state(neighbors)
                 row += [next_state]
             next_grid += [row]
@@ -69,10 +85,16 @@ class GameOfLife:
         self.grid = next_grid
 
     def get_neighbors(self, i, j):
-        pass
+        neighbors_pos = [Point(i+adjacent.i, j+adjacent.j) for adjacent in ADJACENT_POS]
+        filtered_neighbors_pos = [n for n in neighbors_pos if self.is_valid_neighbor(n)]
+        neighbors = [self.grid[n.i][n.j] for n in filtered_neighbors_pos]
+        return neighbors
+
+    def is_valid_neighbor(self, neighbor):
+        return neighbor.i >= 0 and neighbor.j >= 0 and neighbor.i < self.rows and neighbor.j < self.cols
 
     def predict_next_state(self, neighbors):
-        pass
+        return False
 
 
 def txt_to_list(txt):
@@ -83,7 +105,7 @@ def main():
     test = """
     .......
     .......
-    ...#...
+    ..###..
     .......
     .......
     """
@@ -94,7 +116,8 @@ def main():
     gol.populate_grid(test_list, "#")
     print(gol)
 
-    # gol.next()
+    gol.next()
+    print(gol)
 
 
 main()
