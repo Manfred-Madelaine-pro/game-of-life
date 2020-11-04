@@ -1,33 +1,38 @@
 from collections import namedtuple
 
 # Model
-# grid : update
+# [x] grid : update
 # [x] print grid
 
 # Core
-# Update grid
-# parse old and populate new state
+# [x] Update grid
+# [x] parse old and populate new state
 
-# track only living cells
+# [ ] track only living cells
 
-# Test place one cell and see it evolve
-# Display module
+# [x] Test place one cell and see it evolve
+# [ ] Display module
+
+# count the iterations
 
 # history
 # save/import figures
 
-Point = namedtuple('Point', ['i', 'j'])
+
+Point = namedtuple("Point", ["i", "j"])
 
 ADJACENT_POS = [
-    Point(0,1),
-    Point(1,1),
-    Point(1,0),
-    Point(0,-1),
-    Point(-1,-1),
-    Point(-1,0),
-    Point(-1,1),
-    Point(1,-1)
+    Point(0, 1),
+    Point(1, 1),
+    Point(1, 0),
+    Point(0, -1),
+    Point(-1, -1),
+    Point(-1, 0),
+    Point(-1, 1),
+    Point(1, -1),
 ]
+
+REQUIRED_CELLS_FOR_REPRODUCTION = (2, 3)
 
 
 class GameOfLife:
@@ -67,7 +72,7 @@ class GameOfLife:
     def _correct_size_mismatch(self, max_len):
         for row in self.grid:
             if len(row) < max_len:
-                row += [False]              
+                row += [False]
         print("Size mismatch resolved !")
 
     def next(self):
@@ -77,7 +82,6 @@ class GameOfLife:
             row = []
             for j in range(self.cols):
                 neighbors = self.get_neighbors(i, j)
-                print(i, j, neighbors)
                 next_state = self.predict_next_state(neighbors)
                 row += [next_state]
             next_grid += [row]
@@ -85,16 +89,29 @@ class GameOfLife:
         self.grid = next_grid
 
     def get_neighbors(self, i, j):
-        neighbors_pos = [Point(i+adjacent.i, j+adjacent.j) for adjacent in ADJACENT_POS]
+        neighbors_pos = [
+            Point(i + adjacent.i, j + adjacent.j) for adjacent in ADJACENT_POS
+        ]
         filtered_neighbors_pos = [n for n in neighbors_pos if self.is_valid_neighbor(n)]
         neighbors = [self.grid[n.i][n.j] for n in filtered_neighbors_pos]
         return neighbors
 
     def is_valid_neighbor(self, neighbor):
-        return neighbor.i >= 0 and neighbor.j >= 0 and neighbor.i < self.rows and neighbor.j < self.cols
+        return (
+            neighbor.i >= 0
+            and neighbor.j >= 0
+            and neighbor.i < self.rows
+            and neighbor.j < self.cols
+        )
 
     def predict_next_state(self, neighbors):
-        return False
+        return neighbors.count(True) in REQUIRED_CELLS_FOR_REPRODUCTION
+
+    def extinct(self):
+        for r in self.grid:
+            if True in r:
+                return False
+        return True
 
 
 def txt_to_list(txt):
@@ -106,8 +123,14 @@ def main():
     .......
     .......
     ..###..
+    ...#...
     .......
-    .......
+    """
+
+    simple_test = """
+    ...
+    .##.
+    ...
     """
 
     test_list = txt_to_list(test)
@@ -116,8 +139,11 @@ def main():
     gol.populate_grid(test_list, "#")
     print(gol)
 
-    gol.next()
-    print(gol)
+    for i in range(10):
+        gol.next()
+        print(gol)
+        if gol.extinct():
+            break
 
 
 main()
