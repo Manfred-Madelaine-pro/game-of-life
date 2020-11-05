@@ -98,7 +98,7 @@ class GameOfLife:
             row = []
             for j in range(self.cols):
                 neighbors = self.get_neighbors(i, j)
-                next_state = self.predict_next_state(neighbors)
+                next_state = self.predict_next_state(self.grid[i][j], neighbors)
                 row += [next_state]
             next_grid += [row]
 
@@ -120,8 +120,13 @@ class GameOfLife:
             and neighbor.j < self.cols
         )
 
-    def predict_next_state(self, neighbors):
-        return neighbors.count(True) in REQUIRED_CELLS_FOR_REPRODUCTION
+    def predict_next_state(self, cell, neighbors):
+        if cell:
+            return neighbors.count(self.token) in REQUIRED_CELLS_FOR_LIVING
+        else:
+            return neighbors.count(self.token) == REQUIRED_CELLS_FOR_REPRODUCTION
+
+    # ---------- UTILS -----------
 
     def extinct(self):
         for r in self.grid:
