@@ -1,26 +1,9 @@
+
+import time
 from collections import namedtuple
-
-# Model
-# [x] grid : update
-# [x] print grid
-
-# Core
-# [x] Update grid
-# [x] parse old and populate new state
-
-# [ ] track only living cells
-
-# [x] Test place one cell and see it evolve
-# [ ] Display module
-
-# count the iterations
-
-# history
-# save/import figures
 
 
 Point = namedtuple("Point", ["i", "j"])
-
 ADJACENT_POS = [
     Point(0, 1),
     Point(1, 1),
@@ -32,13 +15,18 @@ ADJACENT_POS = [
     Point(1, -1),
 ]
 
-REQUIRED_CELLS_FOR_REPRODUCTION = (2, 3)
+REQUIRED_CELLS_FOR_LIVING = (2, 3)
+REQUIRED_CELLS_FOR_REPRODUCTION = 3
+
+MAX_ITER = 10
+REFRESH_RATE = .3
 
 
 class GameOfLife:
     grid = []
     rows = 0
     cols = 0
+    token = True
 
     def __str__(self):
         alive_char = "O"
@@ -52,14 +40,16 @@ class GameOfLife:
 
         return "The Great Game of Life !" + txt
 
-    def populate_grid(self, txt_grid, alive_char):
-        for line in txt_grid:
+    def set_grid(self, grid, token):
+        for line in grid:
             row = []
             for c in line:
-                row += [c == alive_char]
+                row += [c == token]
             self.grid += [row]
 
         self.set_size()
+
+    # ---------- HANDLE SIZE -----------
 
     def set_size(self):
         self.rows = len(self.grid)
@@ -117,33 +107,28 @@ class GameOfLife:
 def txt_to_list(txt):
     return txt.replace(" ", "").split("\n")[1:-1]
 
+def play(model):
+    gol = GameOfLife()
+    gol.set_grid(model, "#")
+    print(gol)
+
+    l = 2*10
+    gol.widden(l, l*2)
+    gol.play()
+
 
 def main():
     test = """
     .......
-    .......
-    ..###..
-    ...#...
-    .......
-    """
-
-    simple_test = """
-    ...
-    .##.
-    ...
+    .##.##.
+    .#.#.#.
+    .#...#.
+    .#...#.
     """
 
     test_list = txt_to_list(test)
-
-    gol = GameOfLife()
-    gol.populate_grid(test_list, "#")
-    print(gol)
-
-    for i in range(10):
-        gol.next()
-        print(gol)
-        if gol.extinct():
-            break
+    play(test_list)
 
 
-main()
+if __name__ == '__main__':
+    main()
