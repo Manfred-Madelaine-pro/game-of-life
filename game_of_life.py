@@ -65,6 +65,32 @@ class GameOfLife:
                 row += [False]
         print("Size mismatch resolved !")
 
+    def widden(self, rows, cols):
+        self.add_columns(cols)
+        self.add_rows(rows) # always after updating the columns
+
+    def add_columns(self, new_cols):
+        for r in self.grid:
+            r += [not self.token]*new_cols
+        self.cols += new_cols  
+
+    def add_rows(self, new_rows):
+        row = [not self.token]*self.cols
+        for _ in range(new_rows):
+            self.grid += [row]
+
+        self.rows += new_rows
+
+    # ---------- CORE -----------
+
+    def play(self, max_iter=MAX_ITER):
+        for i in range(max_iter):
+            self.next()
+            print(self)
+            time.sleep(REFRESH_RATE)
+            if self.extinct():
+                break
+
     def next(self):
         next_grid = []
 
