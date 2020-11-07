@@ -1,5 +1,5 @@
-
 import time
+import random
 from collections import namedtuple
 
 
@@ -19,7 +19,7 @@ REQUIRED_CELLS_FOR_LIVING = (2, 3)
 REQUIRED_CELLS_FOR_REPRODUCTION = 3
 
 MAX_ITER = 10
-REFRESH_RATE = .3
+REFRESH_RATE = 0.3
 
 
 class GameOfLife:
@@ -28,9 +28,11 @@ class GameOfLife:
     cols = 0
     token = True
 
+    hard_set = False
+
     def __str__(self):
-        alive_char = "O"
-        dead_char = "-"
+        alive_char = "I"
+        dead_char = "."
 
         txt = ""
         for row in self.grid:
@@ -40,7 +42,19 @@ class GameOfLife:
 
         return "The Great Game of Life !" + txt
 
+    def init(self, width, length):
+        for r in range(width):
+            row = [not self.token] * length
+            self.grid += [row]
+
+        self.set_size()
+
     def set_grid(self, grid, token):
+        self.hard_set = True
+
+        if isinstance(grid, str):
+            grid = txt_to_list(grid)
+
         for line in grid:
             row = []
             for c in line:
@@ -48,6 +62,23 @@ class GameOfLife:
             self.grid += [row]
 
         self.set_size()
+
+    def init_life(self):
+        if not self.hard_set:
+            self.grid = [
+                [random.choice([0, 1]) == 1 for __ in range(self.cols)]
+                for _ in range(self.rows)
+            ]
+        print(self)
+
+    def start(self):
+        self.is_livingful = True
+
+    def update(self):
+        self.next()
+
+        if self.extinct():
+            self.is_livingful = False
 
     # ---------- HANDLE SIZE -----------
 
@@ -67,15 +98,15 @@ class GameOfLife:
 
     def widden(self, rows, cols):
         self.add_columns(cols)
-        self.add_rows(rows) # always after updating the columns
+        self.add_rows(rows)  # always after updating the columns
 
     def add_columns(self, new_cols):
         for r in self.grid:
-            r += [not self.token]*new_cols
-        self.cols += new_cols  
+            r += [not self.token] * new_cols
+        self.cols += new_cols
 
     def add_rows(self, new_rows):
-        row = [not self.token]*self.cols
+        row = [not self.token] * self.cols
         for _ in range(new_rows):
             self.grid += [row]
 
@@ -138,13 +169,11 @@ class GameOfLife:
 def txt_to_list(txt):
     return txt.replace(" ", "").split("\n")[1:-1]
 
+
 def play(model):
     gol = GameOfLife()
     gol.set_grid(model, "#")
     print(gol)
-
-    l = 2*10
-    gol.widden(l, l*2)
     gol.play()
 
 
@@ -157,9 +186,8 @@ def main():
     .#...#.
     """
 
-    test_list = txt_to_list(test)
-    play(test_list)
+    play(test)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
