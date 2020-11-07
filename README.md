@@ -11,6 +11,27 @@ Project pitched and started the _3rd november 2020_
 First expected release the friday **20th november 2020** 
 
 
+## dependencies
+1. Set your Virtual Environment :
+
+	``` bash
+	# Download venv librairy
+	apt-get install python3-venv -y
+	# Create your venv
+	py -m venv my_venv
+	# Activate your venv
+	. venv/bin/activate
+	```
+	
+	_For more information, go to [Python Virtual Environment Official Documentation](https://docs.python.org/3/library/venv.html)._
+
+
+1. Install your dependencies
+
+	``` bash
+	pip3 install pygame
+	```
+
 ## :clipboard: Tasks
 
 ### Game of Life Generator
