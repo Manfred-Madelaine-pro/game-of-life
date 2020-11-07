@@ -2,6 +2,13 @@
 
 A personalized game of life generator
 
+
+## :tada: Examples
+
+### :rocket: Game of Life in action
+![Game of Life](img/game_of_life.gif)
+
+
 ## :spiral_calendar: Dates
 
 ### :rocket: Started 
@@ -36,13 +43,22 @@ First expected release the friday **20th november 2020**
 
 ### Game of Life Generator
 
-- [ ] Pick randomly or generate a starting state
+- [x] Pick randomly or generate a starting state
+- [x] show each round
+- [ ] Draw on canvas
 - [ ] Pick or generate a number of rounds
-- [ ] show each round
 
 
 ### Rules
 
-- [ ] Any live cell with two or three live neighbours survives
-- [ ] Any dead cell with three live neighbours becomes a live cell
-- [ ] All other live cells die in the next generation
+- [x] Any live cell with two or three live neighbours survives
+- [x] Any dead cell with three live neighbours becomes a live cell
+- [x] All other live cells die in the next generation
+
+
+
+## :robot: More examples
+
+### :skull: Still Life's "Headless man" examples
+
+![Headless body](img/headless_man.png)
