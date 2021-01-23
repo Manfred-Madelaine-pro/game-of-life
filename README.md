@@ -62,3 +62,12 @@ First expected release the friday **20th november 2020**
 ### :skull: Still Life's "Headless man" examples
 
 ![Headless body](img/headless_man.png)
+
+
+## :handshake: Contributors
+
+<a href="https://github.com/Manfred-Madelaine-pro/game-of-life/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Manfred-Madelaine-pro/game-of-life" />
+</a>
+
+Made with [contributors-img](https://contrib.rocks).
